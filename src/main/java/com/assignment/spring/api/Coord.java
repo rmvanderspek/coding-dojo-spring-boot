@@ -22,7 +22,7 @@ public class Coord {
     @JsonProperty("lat")
     private Double lat;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private final Map<String, Object> additionalProperties = new HashMap<>();
 
     @JsonProperty("lon")
     public Double getLon() {

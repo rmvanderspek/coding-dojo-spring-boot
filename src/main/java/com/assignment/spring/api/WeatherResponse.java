@@ -53,7 +53,7 @@ public class WeatherResponse {
     @JsonProperty("cod")
     private Integer cod;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private final Map<String, Object> additionalProperties = new HashMap<>();
 
     @JsonProperty("coord")
     public Coord getCoord() {

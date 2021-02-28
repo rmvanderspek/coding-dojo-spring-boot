@@ -34,7 +34,7 @@ public class Sys {
     @JsonProperty("sunset")
     private Integer sunset;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private final Map<String, Object> additionalProperties = new HashMap<>();
 
     @JsonProperty("type")
     public Integer getType() {

@@ -19,7 +19,7 @@ public class Clouds {
     @JsonProperty("all")
     private Integer all;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private final Map<String, Object> additionalProperties = new HashMap<>();
 
     @JsonProperty("all")
     public Integer getAll() {

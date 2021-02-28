@@ -28,7 +28,7 @@ public class Weather {
     @JsonProperty("icon")
     private String icon;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private final Map<String, Object> additionalProperties = new HashMap<>();
 
     @JsonProperty("id")
     public Integer getId() {

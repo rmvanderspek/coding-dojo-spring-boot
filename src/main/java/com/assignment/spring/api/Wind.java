@@ -22,7 +22,7 @@ public class Wind {
     @JsonProperty("deg")
     private Integer deg;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private final Map<String, Object> additionalProperties = new HashMap<>();
 
     @JsonProperty("speed")
     public Double getSpeed() {
