@@ -1,6 +1,7 @@
 package com.assignment.spring.config;
 
 
+import com.assignment.spring.api.model.failure.BadRequestException;
 import com.assignment.spring.api.model.failure.CouldNotFindWeatherException;
 import com.assignment.spring.api.model.failure.KnownServerErrorException;
 import com.assignment.spring.api.model.failure.UnknownServerErrorException;
@@ -27,5 +28,10 @@ public class ControllerAdvisor {
     @ExceptionHandler(KnownServerErrorException.class)
     public ResponseEntity<String> knownServerErrorException(KnownServerErrorException ex) {
         return ResponseEntity.status(ex.getHttpStatus()).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<String> badRequestException(BadRequestException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 }

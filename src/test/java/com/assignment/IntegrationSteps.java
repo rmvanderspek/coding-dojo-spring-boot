@@ -122,6 +122,11 @@ public class IntegrationSteps {
         assertEquals(0, weatherEntities.size());
     }
 
+    @Then("the client will not have been bothered with this request")
+    public void theClientWillNotHaveBeenBotheredWithThisRequest() {
+        weatherMockServer.verify(0, getRequestedFor(anyUrl()));
+    }
+
     @After
     public void tearDown() {
         if(weatherMockServer !=  null) {
