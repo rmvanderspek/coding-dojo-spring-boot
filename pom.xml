@@ -17,8 +17,10 @@
     <properties>
         <java.version>11</java.version>
 
+        <com.github.tomakehurst.wiremock.version>2.27.2</com.github.tomakehurst.wiremock.version>
         <com.h2database.h2.version>1.4.200</com.h2database.h2.version>
         <io.cucumber.version>6.10.0</io.cucumber.version>
+        <org.awaitility.awaitility>4.0.3</org.awaitility.awaitility>
         <org.liquibase.liquibase-core.version>4.3.1</org.liquibase.liquibase-core.version>
         <org.postgresql.postgresql.version>42.2.19</org.postgresql.postgresql.version>
         <org.projectlombok.lombok.version>1.18.18</org.projectlombok.lombok.version>
@@ -82,6 +84,20 @@
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>${com.h2database.h2.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.tomakehurst</groupId>
+            <artifactId>wiremock</artifactId>
+            <version>${com.github.tomakehurst.wiremock.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
+            <version>${org.awaitility.awaitility}</version>
             <scope>test</scope>
         </dependency>
 

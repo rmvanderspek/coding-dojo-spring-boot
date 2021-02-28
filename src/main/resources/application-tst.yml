@@ -8,4 +8,4 @@ spring:
     username: sa
     password: sa
 
-com.assignment.spring.weather-client.url: http:localhost:9090/api/weather?q={city}&/APPID=1234
+com.assignment.spring.weather-client.url: http://localhost:9090/api/weather?q={city}&APPID=1234
