@@ -5,7 +5,6 @@ import com.assignment.spring.repository.WeatherEntity;
 import com.assignment.spring.repository.WeatherRepository;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import io.cucumber.java.After;
-import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -42,17 +41,14 @@ public class IntegrationSteps {
     int port;
 
     private ResponseEntity<WeatherEntity> response;
-    private String faultResponse;
     private HttpStatus faultStatus;
 
-    @Before
-    public void prepare() {
-        this.weatherMockServer = new WireMockServer(9090);
-        weatherMockServer.start();
-    }
 
     @Given("that the weather api is available")
     public void thatTheWeatherApiIsAvailable() {
+        this.weatherMockServer = new WireMockServer(9090);
+        weatherMockServer.start();
+
         this.weatherMockServer.stubFor(
                 get((urlPathEqualTo("/api/weather")))
                 .withQueryParam("q", equalTo("Amsterdam"))
@@ -75,7 +71,6 @@ public class IntegrationSteps {
             this.response = restTemplate.getForEntity(path, WeatherEntity.class);
         } catch(HttpStatusCodeException ex) {
             this.faultStatus = ex.getStatusCode();
-            this.faultResponse = ex.getResponseBodyAsString();
         }
     }
 
@@ -115,13 +110,16 @@ public class IntegrationSteps {
 
     @After
     public void tearDown() {
-        this.weatherMockServer.stop();
-        Awaitility.await()
-                .atMost(Duration.ofSeconds(5L))
-                .until(() -> !weatherMockServer.isRunning());
+        if(weatherMockServer !=  null) {
+            this.weatherMockServer.stop();
+            Awaitility.await()
+                    .atMost(Duration.ofSeconds(5L))
+                    .until(() -> !weatherMockServer.isRunning());
+        }
+
+        weatherRepository.deleteAll();
 
         this.response = null;
         this.faultStatus = null;
-        this.faultResponse = null;
     }
 }

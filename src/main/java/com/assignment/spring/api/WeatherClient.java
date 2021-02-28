@@ -36,7 +36,7 @@ public class WeatherClient implements GetWeatherPort {
             throw new CouldNotFindWeatherException(String.format(NOT_FOUND_MESSAGE, query.getCity()), ex);
         } catch (HttpStatusCodeException ex) {
             throw new KnownServerErrorException(SERVER_ERROR_MESSAGE, ex);
-        } catch (RestClientResponseException ex) {
+        } catch (RestClientException ex) {
             throw new UnknownServerErrorException(SERVER_ERROR_MESSAGE, ex);
         }
     }
