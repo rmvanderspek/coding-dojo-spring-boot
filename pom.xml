@@ -21,6 +21,7 @@
         <com.h2database.h2.version>1.4.200</com.h2database.h2.version>
         <io.cucumber.version>6.10.0</io.cucumber.version>
         <org.awaitility.awaitility>4.0.3</org.awaitility.awaitility>
+        <org.jacoco-maven-plugin>0.8.6</org.jacoco-maven-plugin>
         <org.liquibase.liquibase-core.version>4.3.1</org.liquibase.liquibase-core.version>
         <org.postgresql.postgresql.version>42.2.19</org.postgresql.postgresql.version>
         <org.projectlombok.lombok.version>1.18.18</org.projectlombok.lombok.version>
@@ -108,6 +109,25 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${org.jacoco-maven-plugin}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

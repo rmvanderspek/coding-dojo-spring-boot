@@ -70,6 +70,12 @@ public class IntegrationSteps {
                         .willReturn(aResponse()
                                 .withStatus(200)
                                 .withBody(nullString)));
+
+        this.weatherMockServer.stubFor(
+                get((urlPathEqualTo("/api/weather")))
+                        .withQueryParam("q", equalTo("Almere"))
+                        .willReturn(aResponse()
+                                .withStatus(401)));
     }
 
     @When("the client requests the weather for {string}")
@@ -88,7 +94,7 @@ public class IntegrationSteps {
         assertEquals(responseStatusValue, faultStatus.value());
     }
 
-    @Then("the client recieves a valid response")
+    @Then("the client receives a valid response")
     public void theClientRecievesAValidResponse() {
         assertThat(response.getStatusCode(), is(HttpStatus.OK));
         assertThat(response.getBody(), notNullValue());
