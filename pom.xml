@@ -16,6 +16,12 @@
 
     <properties>
         <java.version>11</java.version>
+
+        <com.h2database.h2.version>1.4.200</com.h2database.h2.version>
+        <io.cucumber.version>6.10.0</io.cucumber.version>
+        <org.liquibase.liquibase-core.version>4.3.1</org.liquibase.liquibase-core.version>
+        <org.postgresql.postgresql.version>42.2.19</org.postgresql.postgresql.version>
+        <org.projectlombok.lombok.version>1.18.18</org.projectlombok.lombok.version>
     </properties>
 
     <dependencies>
@@ -31,19 +37,20 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.18</version>
+            <version>${org.projectlombok.lombok.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.2.19</version>
+            <version>${org.postgresql.postgresql.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
-            <version>4.3.1</version>
+            <version>${org.liquibase.liquibase-core.version}</version>
         </dependency>
 
         <dependency>
@@ -51,6 +58,33 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-java</artifactId>
+            <version>${io.cucumber.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit</artifactId>
+            <version>${io.cucumber.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-spring</artifactId>
+            <version>${io.cucumber.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${com.h2database.h2.version}</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
