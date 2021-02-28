@@ -10,3 +10,5 @@ spring:
     username: postgres
     password: ${POSTGRES_PASSWORD}
     initialization-mode: never
+
+com.assignment.spring.weather-client.url: http://api.openweathermap.org/data/2.5/weather?q={city}&APPID=${API_KEY}
