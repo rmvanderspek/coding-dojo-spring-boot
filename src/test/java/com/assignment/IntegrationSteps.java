@@ -6,7 +6,6 @@ import com.assignment.spring.repository.WeatherRepository;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -14,11 +13,12 @@ import io.cucumber.spring.CucumberContextConfiguration;
 import org.awaitility.Awaitility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.Duration;
 import java.util.List;
@@ -26,8 +26,7 @@ import java.util.List;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
 @CucumberContextConfiguration
 @SpringBootTest(classes = Application.class, webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -38,10 +37,13 @@ public class IntegrationSteps {
     @Autowired
     private WeatherRepository weatherRepository;
     @Autowired
-    private TestRestTemplate restTemplate;
+    private RestTemplate restTemplate;
     @LocalServerPort
     int port;
+
     private ResponseEntity<WeatherEntity> response;
+    private String faultResponse;
+    private HttpStatus faultStatus;
 
     @Before
     public void prepare() {
@@ -49,21 +51,38 @@ public class IntegrationSteps {
         weatherMockServer.start();
     }
 
-    @Given("that the weather api is available for {string}")
-    public void thatTheWeatherApiIsAvailable(String city) {
+    @Given("that the weather api is available")
+    public void thatTheWeatherApiIsAvailable() {
         this.weatherMockServer.stubFor(
                 get((urlPathEqualTo("/api/weather")))
-                .withQueryParam("q", equalTo(city))
+                .withQueryParam("q", equalTo("Amsterdam"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
                         .withBodyFile("Amsterdam_response.json")));
+
+        this.weatherMockServer.stubFor(
+                get((urlPathEqualTo("/api/weather")))
+                        .withQueryParam("q", equalTo("Amsterdamned"))
+                        .willReturn(aResponse()
+                                .withStatus(404)));
     }
 
     @When("the client requests the weather for {string}")
     public void theClientWantsToGetTheWeatherForAmsterdam(String city) {
         String path = String.format("http://localhost:%d/weather?city=%s", port, city);
-        this.response = restTemplate.getForEntity(path, WeatherEntity.class);
+        try {
+            this.response = restTemplate.getForEntity(path, WeatherEntity.class);
+        } catch(HttpStatusCodeException ex) {
+            this.faultStatus = ex.getStatusCode();
+            this.faultResponse = ex.getResponseBodyAsString();
+        }
+    }
+
+    @Then("the client receives a valid {int} response")
+    public void theClientReceivesAValidResponse(int responseStatusValue) {
+        assertNull(response);
+        assertEquals(responseStatusValue, faultStatus.value());
     }
 
     @Then("the client recieves a valid response")
@@ -77,7 +96,7 @@ public class IntegrationSteps {
         assertThat(weatherResponse.getTemperature(), is(282.12));
     }
 
-    @And("the response has been persisted")
+    @Then("the response has been persisted")
     public void theResponseHasBeenPersisted() {
         List<WeatherEntity> weatherEntities = (List<WeatherEntity>) weatherRepository.findAll();
         assertEquals(1, weatherEntities.size());
@@ -88,6 +107,12 @@ public class IntegrationSteps {
         assertThat(entity.getTemperature(), is(282.12));
     }
 
+    @Then("nothing will have been persisted")
+    public void nothingWillHaveBeenPersisted() {
+        List<WeatherEntity> weatherEntities = (List<WeatherEntity>) weatherRepository.findAll();
+        assertEquals(0, weatherEntities.size());
+    }
+
     @After
     public void tearDown() {
         this.weatherMockServer.stop();
@@ -96,5 +121,7 @@ public class IntegrationSteps {
                 .until(() -> !weatherMockServer.isRunning());
 
         this.response = null;
+        this.faultStatus = null;
+        this.faultResponse = null;
     }
 }
