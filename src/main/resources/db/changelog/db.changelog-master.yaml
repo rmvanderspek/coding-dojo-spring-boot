@@ -3,6 +3,12 @@ databaseChangeLog:
       id: 1
       author: RM van der Spek
       changes:
+        - createSequence:
+            cycle: false
+            incrementBy: 1
+            ordered: true
+            sequenceName: hibernate_sequence
+            startValue: 1
         - createTable:
             tableName: weather
             columns:
