@@ -62,6 +62,14 @@ public class IntegrationSteps {
                         .withQueryParam("q", equalTo("Amsterdamned"))
                         .willReturn(aResponse()
                                 .withStatus(404)));
+
+        String nullString = null;
+        this.weatherMockServer.stubFor(
+                get((urlPathEqualTo("/api/weather")))
+                        .withQueryParam("q", equalTo("Berlikum"))
+                        .willReturn(aResponse()
+                                .withStatus(200)
+                                .withBody(nullString)));
     }
 
     @When("the client requests the weather for {string}")
