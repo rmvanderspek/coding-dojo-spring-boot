@@ -6,7 +6,6 @@ databaseChangeLog:
         - createSequence:
             cycle: false
             incrementBy: 1
-            ordered: true
             sequenceName: hibernate_sequence
             startValue: 1
         - createTable:
